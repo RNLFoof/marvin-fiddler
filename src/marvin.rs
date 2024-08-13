@@ -135,7 +135,20 @@ pub fn today_items() -> Result<Task, MarvinError> {
 
 #[cfg(test)]
 mod tests {
+    use std::io::{Error, ErrorKind};
+
     use super::*;
+
+    
+    #[test]
+    fn test_marvin_error() {
+        assert_eq!(
+            MarvinError::BadRequest(6), 
+            MarvinError::RequestSend(
+                Box::new(Error::new(ErrorKind::Other, "oh no!"))
+            )
+        )
+    }
 
     #[test]
     fn test_request() {
