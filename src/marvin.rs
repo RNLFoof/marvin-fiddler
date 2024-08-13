@@ -1,4 +1,3 @@
-use std::{error::Error};
 use reqwest;
 use serde::Deserialize;
 use pipe_trait::*;
@@ -95,28 +94,9 @@ pub struct Task {
 use serde::de::DeserializeOwned;
 
 use crate::secrets;
-use derive_more::{Add, Display, From, Into};
 use reqwest::blocking::Response;
+use crate::marvin_error::MarvinError;
 
-#[derive(From, Display, Debug)]
-pub enum MarvinError {
-    #[display("Wow, it's an error code with the following integer value: {_0}")]
-    RequestSend(reqwest::Error),
-    #[display("Wow, it's an error code with the gggggggggggfollowing integer value: {_0}")]
-    BadRequest(u64),
-}
-
-impl PartialEq for MarvinError {
-    // Required method
-    fn eq(&self, other: &MarvinError) -> bool {
-        self == other
-    }
-
-    // Provided method
-    fn ne(&self, other: &MarvinError) -> bool {
-        self != other
-    }
-}
 
 type PotentialResponse = Result<Response, MarvinError>;
 
@@ -130,17 +110,18 @@ fn request(endpoint: &str) -> PotentialResponse {
         .header(reqwest::header::ACCEPT, "application/json")
 
         .send()
-        .or_else(|error| Err(MarvinError::RequestSend(error)))?
+        .or_else(|error| Err(MarvinError::RequestSend(Box::new(error))))?
 //        .context("Failed to send the request :(")?
         .pipe(|x| dbg!(x))
-        .error_for_status()?;
+        .error_for_status()
+        .or_else(|error| Err(MarvinError::BadRequest(6)))?;
   //      .context("The request was bad :(")?;
     return Ok(response);
 }
 
 fn springtrap<T: DeserializeOwned>(response: Response) -> Result<T, MarvinError> {
     response.json::<T>()
-        .or_else(|error| Err(MarvinError::RequestSend(error)))?
+        .or_else(|error| Err(MarvinError::RequestSend(Box::new(error))))?
         .pipe(Ok)
 }
 
