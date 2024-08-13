@@ -1,7 +1,5 @@
 use std::{error::Error, fmt};
-use derive_more::From;
 
-#[derive(From)]
 pub enum MarvinError {
     // #[display("Wow, it's an error code with the following integer value: {_0}")]
     RequestSend(Box<dyn Error>),
