@@ -1,0 +1,1 @@
+pub const FULL_ACCESS_TOKEN: &str = "ha ha ha he he he ho ho ho";

@@ -1,3 +1,6 @@
+mod marvin;
+mod secrets;
+
 fn main() {
-    println!("Hello, world!");
+    marvin::today_items();
 }
