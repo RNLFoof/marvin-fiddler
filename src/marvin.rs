@@ -139,7 +139,15 @@ mod tests {
 
     #[test]
     fn test_request() {
-        request("test");
-        assert!(request("lololololololololloololololoolololololoololoolololool").is_err())
+        request("test")
+            .expect("Looks like the test request failed, maybe your credentials are wrong?");
+
+        assert!(
+            matches!(
+                request("lololololololololloololololoolololololoololoolololool")
+                    .expect_err("Apparently that's a valid URL??? What?? How did you even get here??"),
+                MarvinError::BadRequest(_)
+            )
+        );
     }
 }
