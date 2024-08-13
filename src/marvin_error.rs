@@ -6,18 +6,6 @@ pub enum MarvinError {
     // #[display("Wow, it's an error code with the gggggggggggfollowing integer value: {_0}")]
     BadRequest(u64),
 }
-
-impl PartialEq for MarvinError {
-    // Required method
-    fn eq(&self, other: &MarvinError) -> bool {
-        self == other
-    }
-
-    // Provided method
-    fn ne(&self, other: &MarvinError) -> bool {
-        self != other
-    }
-}
 	
 // Implement std::fmt::Display for AppError
 impl fmt::Display for MarvinError {
@@ -43,11 +31,23 @@ mod tests {
     
     #[test]
     fn test_marvin_error() {
-        assert_eq!(
-            MarvinError::BadRequest(6), 
-            MarvinError::RequestSend(
-                Box::new(Error::new(ErrorKind::Other, "oh no!"))
+        MarvinError::BadRequest(6);
+        MarvinError::RequestSend(
+            Box::new(Error::new(ErrorKind::Other, "oh no!"))
+        );
+        
+        assert!(
+            matches!(
+                MarvinError::BadRequest(6),
+                MarvinError::BadRequest(_), 
             )
-        )
+        );
+        
+        assert!(
+            !matches!(
+                MarvinError::BadRequest(6),
+                MarvinError::RequestSend(_), 
+            )
+        );
     }
 }
