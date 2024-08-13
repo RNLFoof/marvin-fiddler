@@ -139,9 +139,9 @@ fn request(endpoint: &str) -> PotentialResponse {
 }
 
 fn springtrap<T: DeserializeOwned>(response: Response) -> Result<T, MarvinError> {
-    return response.json::<T>()
+    response.json::<T>()
         .or_else(|error| Err(MarvinError::RequestSend(error)))?
-        .pipe(Ok);
+        .pipe(Ok)
 }
 
 
