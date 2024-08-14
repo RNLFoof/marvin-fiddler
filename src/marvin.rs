@@ -1,7 +1,6 @@
 use pipe_trait::*;
 use reqwest;
 use serde::Deserialize;
-//use anyhow::bail;
 
 // Definition taken from https://github.com/amazingmarvin/MarvinAPI/wiki/Marvin-Data-Types#tasks then converted to rust. The definitions are in a consistent format and there's absolutley a way to automate this.
 // Commented out all the fields that errored after doing a regex find and replace because I don't actually need any of them right now hehe
