@@ -4,7 +4,6 @@ use thiserror;
 pub enum MarvinError {
     #[error("Failed to read the file.")]
     RequestSend(#[source] reqwest::Error),
-    // #[display("Wow, it's an error code with the gggggggggggfollowing integer value: {_0}")]
     #[error("Failed to read the file.")]
     BadRequest(#[source] reqwest::Error),
 }
