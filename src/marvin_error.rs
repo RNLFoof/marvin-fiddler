@@ -1,51 +1,39 @@
-use std::{error::Error, fmt};
+use thiserror;
 
+#[derive(thiserror::Error, Debug)]
 pub enum MarvinError {
-    // #[display("Wow, it's an error code with the following integer value: {_0}")]
-    RequestSend(Box<dyn Error>),
+    #[error("Failed to read the file.")]
+    RequestSend(#[source] reqwest::Error),
     // #[display("Wow, it's an error code with the gggggggggggfollowing integer value: {_0}")]
-    BadRequest(u64),
+    #[error("Failed to read the file.")]
+    BadRequest(#[source] reqwest::Error),
 }
-	
-// Implement std::fmt::Display for AppError
-impl fmt::Display for MarvinError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "An Error Occurred, Please Try Again!") // user-facing output
-    }
-}
-
-// Implement std::fmt::Debug for AppError
-impl fmt::Debug for MarvinError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{{ file: {}, line: {} }}", file!(), line!()) // programmer-facing output
-    }
-}
-
-impl std::error::Error for MarvinError {}
 
 #[cfg(test)]
 mod tests {
-    use std::io::{Error, ErrorKind};
-
     use super::*;
     
     #[test]
     fn test_marvin_error() {
-        MarvinError::BadRequest(6);
-        MarvinError::RequestSend(
-            Box::new(Error::new(ErrorKind::Other, "oh no!"))
-        );
+        let client = reqwest::blocking::Client::new();
+        let error = || client
+            .post(format!("invalid url"))
+            .send()
+            .expect_err("WHAT??");
+
+        MarvinError::BadRequest(error());
+        MarvinError::RequestSend(error());
         
         assert!(
             matches!(
-                MarvinError::BadRequest(6),
+                MarvinError::BadRequest(error()),
                 MarvinError::BadRequest(_), 
             )
         );
         
         assert!(
             !matches!(
-                MarvinError::BadRequest(6),
+                MarvinError::BadRequest(error()),
                 MarvinError::RequestSend(_), 
             )
         );

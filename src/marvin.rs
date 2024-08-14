@@ -102,7 +102,7 @@ type PotentialResponse = Result<Response, MarvinError>;
 
 fn request(endpoint: &str) -> PotentialResponse {
     let client = reqwest::blocking::Client::new();
-    let response = client
+    return client
         .post(format!("https://serv.amazingmarvin.com/api/{endpoint}"))
 
         .header("Content-Length", 0)
@@ -110,18 +110,17 @@ fn request(endpoint: &str) -> PotentialResponse {
         .header(reqwest::header::ACCEPT, "application/json")
 
         .send()
-        .or_else(|error| Err(MarvinError::RequestSend(Box::new(error))))?
-//        .context("Failed to send the request :(")?
-        .pipe(|x| dbg!(x))
+        .or_else(|error| Err(MarvinError::RequestSend(error)))?
+
         .error_for_status()
-        .or_else(|error| Err(MarvinError::BadRequest(6)))?;
-  //      .context("The request was bad :(")?;
-    return Ok(response);
+        .or_else(|error| Err(MarvinError::BadRequest(error)))?
+
+        .pipe(Ok);
 }
 
 fn springtrap<T: DeserializeOwned>(response: Response) -> Result<T, MarvinError> {
     response.json::<T>()
-        .or_else(|error| Err(MarvinError::RequestSend(Box::new(error))))?
+        .or_else(|error| Err(MarvinError::RequestSend(error)))?
         .pipe(Ok)
 }
 
