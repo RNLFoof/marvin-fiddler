@@ -118,11 +118,14 @@ fn springtrap<T: DeserializeOwned>(response: Response) -> Result<T, MarvinError>
         .pipe(Ok)
 }
 
-pub fn today_items() -> Result<Task, MarvinError> {
-    request("todayItems")
-        .or_else(|error| Err(error))?
-        .pipe(springtrap::<Task>)
-        .pipe(Ok::<Result<Task, MarvinError>, MarvinError>)?
+/// Obtain something and crush it into the desired shape in one swift motion.
+/// [Visualization](https://youtube.com/clip/Ugkx6_yCmtd_YFHRkAGk9xv5SccrW9Tjq-rC?si=-xF9pB4civAFyWGc)
+fn nuzzner_fubs<T: DeserializeOwned>(endpoint: &str) -> Result<T, MarvinError> {
+    endpoint.pipe(request)?.pipe(springtrap::<T>)?.pipe(Ok)
+}
+
+pub fn today_items() -> Result<Vec<Task>, MarvinError> {
+    nuzzner_fubs("todayItems")
 }
 
 #[cfg(test)]
