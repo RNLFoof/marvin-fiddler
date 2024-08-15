@@ -2,9 +2,9 @@ use thiserror;
 
 #[derive(thiserror::Error, Debug)]
 pub enum MarvinError {
-    #[error("Failed to read the file.")]
+    #[error("Failed to actually send the request.")]
     RequestSend(#[source] reqwest::Error),
-    #[error("Failed to read the file.")]
+    #[error("Bad request, maybe your credentials are wrong? Check src/secrets.rs")]
     BadRequest(#[source] reqwest::Error),
 }
 
