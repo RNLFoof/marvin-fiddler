@@ -1,3 +1,5 @@
+use std::error::Error;
+
 use thiserror;
 
 #[derive(thiserror::Error, Debug)]
@@ -6,6 +8,8 @@ pub enum MarvinError {
     RequestSend(#[source] reqwest::Error),
     #[error("Bad request, maybe your credentials are wrong? Check src/secrets.rs")]
     BadRequest(#[source] reqwest::Error),
+    #[error("Countn't force the data into the desired structure.")]
+    Springtrap(#[source] Box<dyn Error>),
 }
 
 #[cfg(test)]
