@@ -143,4 +143,23 @@ mod tests {
             MarvinError::BadRequest(_)
         ));
     }
+
+    #[test]
+    fn test_springtrap() {
+        /* reqwest::Response::new is private, so it'll need to be tested with an actual request I think??
+        At which point I figure any nuzzner_fubs tests will be sufficient.
+        I *should* use monkey patches or whatever Rust's equivalent is but also I don't care enough rn lol
+        Well actually I guess if I can't avoid that behavior I *should* be pulling it out into its own function and making that function into a parameter
+        WHATEVER!! */
+    }
+
+    #[test]
+    fn test_nuzzner_fubs() {
+        /* basically the same takeaway as springtrap except I'm counting on the public api call functions */
+    }
+
+    #[test]
+    fn test_today_items() {
+        today_items().unwrap();
+    }
 }
