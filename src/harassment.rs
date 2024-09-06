@@ -22,26 +22,42 @@ struct Context {
 }
 
 mod cultivars {
-    use std::time::Duration;
+    use std::{sync::LazyLock, time::Duration};
 
     pub struct Cultivar {
         harvest_interval: Duration,
         harvest_behavior: Box<dyn Fn() -> Vec<String>>,
     }
 
-    fn current_time() -> String {
-        todo!()
+    // Kinda hate that these are functions ionstead of constants,
+    // but it ended up being a pain in the ass to make them constants.
+    // idk enough about rust for that yet
+
+    fn current_time() -> Cultivar {
+        Cultivar {
+            harvest_interval: Duration::from_secs(60 * 15),
+            harvest_behavior: Box::new(|| todo!()),
+        }
     }
 
-    fn fraction_of_duration() -> String {
-        todo!()
+    fn fraction_of_duration() -> Cultivar {
+        Cultivar {
+            harvest_interval: Duration::from_secs(60 * 5),
+            harvest_behavior: Box::new(|| todo!()),
+        }
     }
 
-    fn duration_exceeded() -> String {
-        todo!()
+    fn duration_exceeded() -> Cultivar {
+        Cultivar {
+            harvest_interval: Duration::from_secs(60 * 5),
+            harvest_behavior: Box::new(|| todo!()),
+        }
     }
 
-    fn prioritize() -> String {
-        todo!()
+    fn prioritize() -> Cultivar {
+        Cultivar {
+            harvest_interval: Duration::from_secs(60 * 60 * 1),
+            harvest_behavior: Box::new(|| todo!()),
+        }
     }
 }
