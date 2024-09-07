@@ -1,8 +1,23 @@
-use crate::marvin::Task;
+use std::time::Duration;
 
-fn contemplate_harassment() {
-    todo!()
+use crate::marvin::Task;
+use num::integer::gcd;
+use pipe_trait::Pipe;
+
+fn contemplate_harassment_every(cultivars: Vec<cultivars::Cultivar>) -> Duration {
+    fn chained_gcd(numbers: Vec<u64>) -> u64 {
+        numbers.iter().fold(0, |x: u64, y: &u64| gcd(x, *y))
+    }
+
+    cultivars
+        .iter()
+        .map(|x| x.harvest_interval.as_secs())
+        .collect::<Vec<_>>()
+        .pipe(chained_gcd)
+        .pipe(Duration::from_secs)
 }
+
+pub fn prepetually_contemplate_harassment(cultivars: Vec<cultivars::Cultivar>) {}
 
 fn harass() {
     todo!()
@@ -22,11 +37,11 @@ struct Context {
 }
 
 mod cultivars {
-    use std::{sync::LazyLock, time::Duration};
+    use std::{time::Duration};
 
     pub struct Cultivar {
-        harvest_interval: Duration,
-        harvest_behavior: Box<dyn Fn() -> Vec<String>>,
+        pub harvest_interval: Duration,
+        pub harvest_behavior: Box<dyn Fn() -> Vec<String>>,
     }
 
     // Kinda hate that these are functions ionstead of constants,
